@@ -18,6 +18,7 @@ public class SearchTests {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
         driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
     }
 
     @BeforeMethod
@@ -43,19 +44,19 @@ public class SearchTests {
 
     @Test
     public void whenTheNameOfTheBookWasEnteredIntoTheSearchThenTheBookOpened() {
-        driver.findElement(By.name("keyword")).sendKeys("The Moon and Sixpence");
+        driver.findElement(By.name("keyword")).sendKeys("Great Expectations");
         WebElement registerButton = driver.findElement(By.cssSelector("[value='Search']"));
         registerButton.click();
-        Assert.assertEquals(driver.getPageSource().contains("add_to_cart"), true,
+        WebElement actualResult = driver.findElement(By.cssSelector("img[src='../images/add_to_cart.gif']"));
+        Assert.assertEquals(actualResult.isDisplayed(),true,
                 "The requested book was not found.");
     }
-
     @Test
-    public void whenWeSearchForTheAuthorInTheSearchThenTheBookOpens() {
-        driver.findElement(By.name("keyword")).sendKeys("W.Somerset Maugham");
+    public void whenWeSearchForTheAuthorInTheSearchThenTheBookOpens (){
+        driver.findElement(By.name("keyword")).sendKeys("Charles Dickens");
         WebElement registerButton = driver.findElement(By.cssSelector("[value='Search']"));
         registerButton.click();
-        Assert.assertEquals(driver.getPageSource().contains("add_to_cart"), true,
+        Assert.assertEquals(driver.getPageSource().contains("img[src='../images/add_to_cart.gif']"), true,
                 "Book search by author did not work.");
     }
 }
